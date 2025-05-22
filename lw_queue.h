@@ -13,7 +13,16 @@ typedef struct
 
 }lwq_t;
 
-/*定义队列内存管理类型*/
+/*定义队列集结构体类型, 从队列类型继承*/
+typedef struct 
+{
+    lwq_t** queues;
+    size_t queue_count;
+    size_t max_queues;
+
+}lwq_set_t;
+
+/*定义队列内存管理钩子类型*/
 typedef struct
 {
     void* (*lwq_malloc)(size_t size);
@@ -30,5 +39,9 @@ void lwq_force_write_head(lwq_t* queue, const void* element);
 unsigned char lwq_is_full(lwq_t* queue);
 unsigned char lwq_is_empty(lwq_t* queue);
 void lwq_destroy(lwq_t* queue);
+void lwq_set_create(lwq_set_t* queue_set, size_t max_queues);
+unsigned char lwq_add_to_set(lwq_set_t* queue_set, lwq_t* queue);
+lwq_t* lwq_select_from_set(lwq_set_t* queue_set);
+void lwq_set_destroy(lwq_set_t* queue_set);
 
 #endif // !__LW_QUEUE_H
