@@ -2,20 +2,20 @@
 #include "stdlib.h"
 #include "string.h"
 
-/*¾²Ì¬±äÁ¿¶¨Òå*/
+/*é™æ€å˜é‡å®šä¹‰*/
 
-/*¶¨Òå¶ÓÁĞ¿âµÄÄÚ´æ¹ÜÀí¹³×Ó£¬Ä¬ÈÏ²ÉÓÃc±ê×¼µÄ¹³×Ó*/
+/*å®šä¹‰é˜Ÿåˆ—åº“çš„å†…å­˜ç®¡ç†é’©å­ï¼Œé»˜è®¤é‡‡ç”¨cæ ‡å‡†çš„é’©å­*/
 static lwq_hook_t lwq_mem_hook =
 {
     .lwq_malloc = malloc,
     .lwq_free = free
 };
 
-/*È«¾Öº¯Êı¶¨Òå*/
+/*å…¨å±€å‡½æ•°å®šä¹‰*/
 
 /**
- * @brief ÉèÖÃ¶ÓÁĞµÄÄÚ´æ¹³×Ó
- * @param hook ¶ÓÁĞÄÚ´æ¹³×Ó±äÁ¿µÄÖ¸Õë
+ * @brief è®¾ç½®é˜Ÿåˆ—çš„å†…å­˜é’©å­
+ * @param hook é˜Ÿåˆ—å†…å­˜é’©å­å˜é‡çš„æŒ‡é’ˆ
  */
 void lwq_hook_init(lwq_hook_t* hook)
 {
@@ -24,10 +24,10 @@ void lwq_hook_init(lwq_hook_t* hook)
 }
 
 /**
- * @brief ´´½¨¶ÓÁĞ
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @param capacity ¶ÓÁĞµÄÈİÁ¿
- * @param element_size ¶ÓÁĞÔªËØµÄ´óĞ¡
+ * @brief åˆ›å»ºé˜Ÿåˆ—
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @param capacity é˜Ÿåˆ—çš„å®¹é‡
+ * @param element_size é˜Ÿåˆ—å…ƒç´ çš„å¤§å°
  */
 void lwq_create(lwq_t* queue, size_t capacity, size_t element_size)
 {
@@ -39,10 +39,10 @@ void lwq_create(lwq_t* queue, size_t capacity, size_t element_size)
 }
 
 /**
- * @brief Ğ´ÈëÊı¾İµ½¶ÓÁĞ
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @param element ÒªĞ´Èë¶ÔÏóµÄÖ¸Õë
- * @return 1£º³É¹¦ 0£ºÊ§°Ü
+ * @brief å†™å…¥æ•°æ®åˆ°é˜Ÿåˆ—
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @param element è¦å†™å…¥å¯¹è±¡çš„æŒ‡é’ˆ
+ * @return 1ï¼šæˆåŠŸ 0ï¼šå¤±è´¥
  */
 unsigned char lwq_write(lwq_t* queue, const void* element)
 {
@@ -50,7 +50,7 @@ unsigned char lwq_write(lwq_t* queue, const void* element)
 
     if (next_tail == queue->head) 
     {
-        return 0; /*¶ÓÁĞÒÑÂú*/
+        return 0; /*é˜Ÿåˆ—å·²æ»¡*/
     }
     memcpy((char*)queue->data + queue->tail * queue->element_size, element, queue->element_size);
     queue->tail = next_tail;
@@ -58,16 +58,16 @@ unsigned char lwq_write(lwq_t* queue, const void* element)
 }
  
 /**
- * @brief ´Ó¶ÓÁĞ¶ÁÈ¡Êı¾İ
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @param element ÓÃÓÚ±£´æËù¶ÁÈ¡¶ÔÏóµÄÊı¾İµÄÖ¸Õë
- * @return 1£º³É¹¦ 0£ºÊ§°Ü
+ * @brief ä»é˜Ÿåˆ—è¯»å–æ•°æ®
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @param element ç”¨äºä¿å­˜æ‰€è¯»å–å¯¹è±¡çš„æ•°æ®çš„æŒ‡é’ˆ
+ * @return 1ï¼šæˆåŠŸ 0ï¼šå¤±è´¥
  */
 unsigned char lwq_read(lwq_t* queue, void* element)
 {
     if (queue->head == queue->tail) 
     {
-        return 0; /*¶ÓÁĞÎª¿Õ*/
+        return 0; /*é˜Ÿåˆ—ä¸ºç©º*/
     }
     memcpy(element, (char*)queue->data + queue->head * queue->element_size, queue->element_size);
     queue->head = (queue->head + 1) % queue->capacity;
@@ -75,32 +75,32 @@ unsigned char lwq_read(lwq_t* queue, void* element)
 }
 
 /**
- * @brief ´Ó¶ÓÁĞ¿ú¶ÁÊı¾İ
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @param element ÓÃÓÚ±£´æËù¶ÁÈ¡¶ÔÏóµÄÊı¾İµÄÖ¸Õë
- * @return 1£º³É¹¦ 0£ºÊ§°Ü
+ * @brief ä»é˜Ÿåˆ—çª¥è¯»æ•°æ®
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @param element ç”¨äºä¿å­˜æ‰€è¯»å–å¯¹è±¡çš„æ•°æ®çš„æŒ‡é’ˆ
+ * @return 1ï¼šæˆåŠŸ 0ï¼šå¤±è´¥
  */
 unsigned char lwq_peek(lwq_t* queue, void* element)
 {
     if (queue->head == queue->tail) 
     {
-        return 0; /*¶ÓÁĞÎª¿Õ*/
+        return 0; /*é˜Ÿåˆ—ä¸ºç©º*/
     }
     memcpy(element, (char*)queue->data + queue->head * queue->element_size, queue->element_size);
     return 1;
 }
 
 /**
- * @brief Ç¿ÖÆĞ´Èë¶ÓÁĞÍ·
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @param element ÒªĞ´Èë¶ÔÏóµÄÖ¸Õë
+ * @brief å¼ºåˆ¶å†™å…¥é˜Ÿåˆ—å¤´
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @param element è¦å†™å…¥å¯¹è±¡çš„æŒ‡é’ˆ
  */
 void lwq_force_write_head(lwq_t* queue, const void* element)
 {    
-    /*Ç¿ÖÆ¸²¸ÇĞ´Èë*/
+    /*å¼ºåˆ¶è¦†ç›–å†™å…¥*/
     memcpy((char*)queue->data, element, queue->element_size);
 
-    /*Èç¹û¶ÓÁĞÎª¿ÕÔòÒÆ¶¯¶ÓÎ²Ë÷Òı*/
+    /*å¦‚æœé˜Ÿåˆ—ä¸ºç©ºåˆ™ç§»åŠ¨é˜Ÿå°¾ç´¢å¼•*/
     if (lwq_is_empty(queue)) 
     {              
         queue->tail = 1;
@@ -108,9 +108,9 @@ void lwq_force_write_head(lwq_t* queue, const void* element)
 }
  
 /**
- * @brief ²éÑ¯¶ÓÁĞÊÇ·ñÒÑÂú
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @return 1£ºÒÑÂú 0£ºÎ´Âú
+ * @brief æŸ¥è¯¢é˜Ÿåˆ—æ˜¯å¦å·²æ»¡
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @return 1ï¼šå·²æ»¡ 0ï¼šæœªæ»¡
  */
 unsigned char lwq_is_full(lwq_t* queue)
 {
@@ -118,9 +118,9 @@ unsigned char lwq_is_full(lwq_t* queue)
 }
 
 /**
- * @brief ²éÑ¯¶ÓÁĞÊÇ·ñÎª¿Õ
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @return 1£º¶ÓÁĞ¿Õ 0£º¶ÓÁĞ·Ç¿Õ
+ * @brief æŸ¥è¯¢é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @return 1ï¼šé˜Ÿåˆ—ç©º 0ï¼šé˜Ÿåˆ—éç©º
  */
 unsigned char lwq_is_empty(lwq_t* queue)
 {
@@ -128,8 +128,8 @@ unsigned char lwq_is_empty(lwq_t* queue)
 }
 
 /**
- * @brief Ïú»Ù¶ÓÁĞ
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
+ * @brief é”€æ¯é˜Ÿåˆ—
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
  */
 void lwq_destroy(lwq_t* queue)
 {
@@ -137,9 +137,9 @@ void lwq_destroy(lwq_t* queue)
 }
  
 /**
- * @brief ´´½¨¶ÓÁĞ¼¯
- * @param queue_set ¶ÓÁĞ¼¯¾ä±úµÄÖ¸Õë
- * @param max_queues ¶ÓÁĞ¼¯ËùÈİÄÉµÄ×î´ó¶ÓÁĞÊıÁ¿
+ * @brief åˆ›å»ºé˜Ÿåˆ—é›†
+ * @param queue_set é˜Ÿåˆ—é›†å¥æŸ„çš„æŒ‡é’ˆ
+ * @param max_queues é˜Ÿåˆ—é›†æ‰€å®¹çº³çš„æœ€å¤§é˜Ÿåˆ—æ•°é‡
  */
 void lwq_set_create(lwq_set_t* queue_set, size_t max_queues)
 {
@@ -149,25 +149,25 @@ void lwq_set_create(lwq_set_t* queue_set, size_t max_queues)
 }
 
 /**
- * @brief Ìí¼Ó¶ÓÁĞµ½¶ÓÁĞ¼¯
- * @param queue_set ¶ÓÁĞ¼¯¾ä±úµÄÖ¸Õë
- * @param queue ¶ÓÁĞ¾ä±úµÄÖ¸Õë
- * @return 1£º³É¹¦ 0£ºÊ§°Ü
+ * @brief æ·»åŠ é˜Ÿåˆ—åˆ°é˜Ÿåˆ—é›†
+ * @param queue_set é˜Ÿåˆ—é›†å¥æŸ„çš„æŒ‡é’ˆ
+ * @param queue é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆ
+ * @return 1ï¼šæˆåŠŸ 0ï¼šå¤±è´¥
  */
 unsigned char lwq_add_to_set(lwq_set_t* queue_set, lwq_t* queue)
 {
     if (queue_set->queue_count >= queue_set->max_queues) 
     {
-        return 0; /*¶ÓÁĞ¼¯ÒÑÂú*/
+        return 0; /*é˜Ÿåˆ—é›†å·²æ»¡*/
     }
     queue_set->queues[queue_set->queue_count++] = queue;
     return 1;
 }
 
 /**
- * @brief ´Ó¶ÓÁĞ¼¯ÖĞ»ñÈ¡ÓĞÊı¾İµÄ¶ÓÁĞ
- * @param queue_set ¶ÓÁĞ¼¯¾ä±úµÄÖ¸Õë
- * @return ¶ÓÁĞ¾ä±úµÄÖ¸Õë£¬Ã»ÓĞ¶ÓÁĞÓĞÊı¾İÔò·µ»ØNULL
+ * @brief ä»é˜Ÿåˆ—é›†ä¸­è·å–æœ‰æ•°æ®çš„é˜Ÿåˆ—
+ * @param queue_set é˜Ÿåˆ—é›†å¥æŸ„çš„æŒ‡é’ˆ
+ * @return é˜Ÿåˆ—å¥æŸ„çš„æŒ‡é’ˆï¼Œæ²¡æœ‰é˜Ÿåˆ—æœ‰æ•°æ®åˆ™è¿”å›NULL
  */
 lwq_t* lwq_select_from_set(lwq_set_t* queue_set)
 {
@@ -178,12 +178,12 @@ lwq_t* lwq_select_from_set(lwq_set_t* queue_set)
             return queue_set->queues[i];
         }
     }
-    return NULL; /*Ã»ÓĞ¿ÉÓÃ¶ÓÁĞ*/
+    return NULL; /*æ²¡æœ‰å¯ç”¨é˜Ÿåˆ—*/
 }
 
 /**
- * @brief Ïú»Ù¶ÓÁĞ¼¯
- * @param queue_set ¶ÓÁĞ¼¯¾ä±úµÄÖ¸Õë
+ * @brief é”€æ¯é˜Ÿåˆ—é›†
+ * @param queue_set é˜Ÿåˆ—é›†å¥æŸ„çš„æŒ‡é’ˆ
  */
 void lwq_set_destroy(lwq_set_t* queue_set)
 {

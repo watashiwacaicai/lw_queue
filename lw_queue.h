@@ -1,19 +1,24 @@
 #ifndef __LW_QUEUE_H
 #define __LW_QUEUE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/*¶¨Òå¶ÓÁĞ½á¹¹ÌåÀàĞÍ*/
+#include "stdlib.h"
+
+/*å®šä¹‰é˜Ÿåˆ—ç»“æ„ä½“ç±»å‹*/
 typedef struct 
 {
-    void* data;         /*¶ÓÁĞµÄÊı¾İÖ¸Õë*/
-    size_t element_size;/*¶ÓÁĞµÄÔªËØ´óĞ¡*/
-    size_t capacity;    /*¶ÓÁĞµÄÈİÁ¿*/
-    size_t head;        /*¶ÓÁĞÍ·Ë÷Òı*/
-    size_t tail;        /*¶ÓÁĞÎ²Ë÷Òı*/
+    void* data;         /*é˜Ÿåˆ—çš„æ•°æ®æŒ‡é’ˆ*/
+    size_t element_size;/*é˜Ÿåˆ—çš„å…ƒç´ å¤§å°*/
+    size_t capacity;    /*é˜Ÿåˆ—çš„å®¹é‡*/
+    size_t head;        /*é˜Ÿåˆ—å¤´ç´¢å¼•*/
+    size_t tail;        /*é˜Ÿåˆ—å°¾ç´¢å¼•*/
 
 }lwq_t;
 
-/*¶¨Òå¶ÓÁĞ¼¯½á¹¹ÌåÀàĞÍ, ´Ó¶ÓÁĞÀàĞÍ¼Ì³Ğ*/
+/*å®šä¹‰é˜Ÿåˆ—é›†ç»“æ„ä½“ç±»å‹, ä»é˜Ÿåˆ—ç±»å‹ç»§æ‰¿*/
 typedef struct 
 {
     lwq_t** queues;
@@ -22,7 +27,7 @@ typedef struct
 
 }lwq_set_t;
 
-/*¶¨Òå¶ÓÁĞÄÚ´æ¹ÜÀí¹³×ÓÀàĞÍ*/
+/*å®šä¹‰é˜Ÿåˆ—å†…å­˜ç®¡ç†é’©å­ç±»å‹*/
 typedef struct
 {
     void* (*lwq_malloc)(size_t size);
@@ -43,5 +48,9 @@ void lwq_set_create(lwq_set_t* queue_set, size_t max_queues);
 unsigned char lwq_add_to_set(lwq_set_t* queue_set, lwq_t* queue);
 lwq_t* lwq_select_from_set(lwq_set_t* queue_set);
 void lwq_set_destroy(lwq_set_t* queue_set);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // !__LW_QUEUE_H
